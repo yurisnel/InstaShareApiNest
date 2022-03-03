@@ -7,9 +7,9 @@ if (process.env.NODE_ENV && process.env.NODE_ENV == 'test') {
 dotenv.config(conf);
 
 export default () => ({
-  port: parseInt(process.env.PORT, 10) || 3000,
-  jwtPrivateKey: process.env.JWT_PRIVATE_KEY,
-  database: {
+  JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY,
+  TOKEN_EXPIRATION: process.env.TOKEN_EXPIRATION,  
+  DATABASE: {
     dialect: process.env.DATABASE_DIALECT as Dialect,
     host: process.env.DATABASE_HOST,
     port: parseInt(process.env.DATABASE_PORT, 10) || 5432,

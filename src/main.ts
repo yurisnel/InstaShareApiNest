@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
+import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 //import { ValidateInputPipe } from './core/pipes/validate.pipe';
 
@@ -11,6 +11,9 @@ async function bootstrap() {
   // handle all user input validation globally
   //app.useGlobalPipes(new ValidateInputPipe());
   app.useGlobalPipes(new ValidationPipe());
+  app.use(bodyParser.json({limit: '50mb'}));
+  app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Api rest Nestjs-Demo')
@@ -31,7 +34,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  app.enableCors();
+
   await app.listen(3000);
 }
 bootstrap();

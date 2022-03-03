@@ -1,20 +1,19 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { User as userEntity } from '../users/user.entity';
-import { PROFILE_REPOSITORY } from '../../config/constants';
+import { User, User as userEntity } from '../users/user.entity';
+import { PROFILE_REPOSITORY, SEQUELIZE, USER_REPOSITORY } from '../../config/constants';
 import {
   IProfileInput,
   IProfileOutput,
-  Profile as ProfileEntity,
+  Profile
 } from './profile.entity';
-import { ProfileUserDto } from './dto/profile.dto';
-import { UsersService } from '../users/users.service';
+import { Sequelize, Transaction } from 'sequelize'
 
 @Injectable()
 export class ProfileService {
   constructor(
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profileRepository: typeof ProfileEntity,
-    private readonly userService: UsersService,
+    @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
+    @Inject(PROFILE_REPOSITORY) private readonly profileRepository: typeof Profile,
+    @Inject(USER_REPOSITORY) private readonly userRepository: typeof User,
   ) {}
 
   async create(data: IProfileInput, userId: number): Promise<IProfileOutput> {
@@ -33,7 +32,7 @@ export class ProfileService {
       include: [{ model: userEntity, attributes: { exclude: ['password'] } }],
     });
     if (!item) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This profile doesn't exist");
     }
     return item;
   }
@@ -43,45 +42,48 @@ export class ProfileService {
       where: { id },
     });
     if (deletedCount === 0) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This profile doesn't exist");
     }
     return true;
   }
 
-  async update(data: IProfileInput, userId: number): Promise<IProfileOutput> {
-    const $repo = this.profileRepository;
-    return new Promise(function (resolve, reject) {
-      $repo
+  
+  async update(data: IProfileInput, userId: number): Promise<any> {
+
+    const t = await this.sequelize.transaction();
+    try {
+      await this.profileRepository
         .update(data, {
           returning: true,
+          transaction: t,
           where: { userId },
-        })
-        .then(function ([number, items]) {
-          const item = $repo.findOne({ where: { userId } });
-          if (item) {
-            resolve(item);
-          } else {
-            throw new NotFoundException("This item doesn't exist");
-          }
         });
-    });
-  }
+
+      let id = userId;
+      await this.userRepository.update(data.user, {
+        returning: true,
+        transaction: t,
+        where: { id },
+      })
+      const user = await this.findOneByUserId(userId);
+      await t.commit();
+      return user;
+
+    } catch (error) {
+      await t.rollback();
+    }
+    
+    return false;
+  }    
+   
 
   async updateOrCreate(
-    data: ProfileUserDto,
+    data: IProfileInput,
     userId: number,
   ): Promise<IProfileOutput> {
     const profile = await this.profileRepository.findOne({ where: { userId } });
 
-    if (profile) {
-      const user = (({ name, email, password, gender }) => ({
-        name,
-        email,
-        password,
-        gender,
-      }))(data);
-
-      this.userService.update(user, userId);
+    if (profile) { 
       return this.update(data, userId);
     } else {
       return this.create(data, userId);

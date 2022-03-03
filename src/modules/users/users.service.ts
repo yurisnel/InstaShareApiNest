@@ -18,7 +18,7 @@ export class UsersService {
       where: { email },
     });
     if (!item) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This user doesn't exist");
     }
     return item;
   }
@@ -28,7 +28,7 @@ export class UsersService {
       where: { id },
     });
     if (!item) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This user doesn't exist");
     }
     return item;
   }
@@ -44,12 +44,12 @@ export class UsersService {
       where: { id },
     });
     if (deletedCount === 0) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This user doesn't exist");
     }
     return true;
   }
 
-  async update(data: IUserInput, id: number): Promise<IUserOuput> {
+  async update(data: Partial<IUserInput>, id: number): Promise<IUserOuput> {
     const $repo = this.userRepository;
     return new Promise(function (resolve, reject) {
       $repo
@@ -58,12 +58,8 @@ export class UsersService {
           where: { id },
         })
         .then(function ([number, items]) {
-          const item = $repo.findOne({ where: { id } });
-          if (item) {
-            resolve(item);
-          } else {
-            throw new NotFoundException("This item doesn't exist");
-          }
+          let item = $repo.findOne({ where: { id } });          
+          resolve(item);     
         });
     });
   }
@@ -75,7 +71,7 @@ export class UsersService {
         { where: { id }, returning: true },
       );
     if (numberOfAffectedRows == 0) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This user doesn't exist");
     }
     return updatedPost;
   }

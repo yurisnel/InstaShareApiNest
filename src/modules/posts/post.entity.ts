@@ -8,6 +8,8 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { User } from '../users/user.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, MinLength } from 'class-validator';
 
 export interface IPostAttributes {
   id: number;
@@ -33,12 +35,21 @@ export class Post
 {
   id: number;
 
+  @ApiProperty({
+    default: 'Mi primer post',
+  })
+  @IsNotEmpty()
+  @MinLength(4)
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   title: string;
 
+  @ApiProperty({
+    default: 'Este es el contenido de mi primer post',
+  })
+  @IsNotEmpty()
   @Column({
     type: DataType.TEXT,
     allowNull: false,
@@ -59,7 +70,7 @@ export class Post
   user: User;
 
   // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-  public readonly deletedAt!: Date;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly deletedAt: Date;
 }

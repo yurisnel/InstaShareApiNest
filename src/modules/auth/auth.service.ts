@@ -20,13 +20,14 @@ export class AuthService {
   ) {}
 
   public async login(login: LoginInputDto): Promise<LoginOutputDto> {
-    const user = await this.validateUser(login.email, login.password);
+    let user = await this.validateUser(login.email, login.password);
     if (!user) {
       throw new UnauthorizedException('Invalid user credentials');
     }
-    const token = await this.generateToken(user);
-    const profile = await this.profileService.findOneByUserId(user.id);
-    return { user, token, profile };
+    let avatar = user.avatarUrl;
+    let token = await this.generateToken(user);
+    //const profile = await this.profileService.findOneByUserId(user.id);    
+    return { user, token };
   }
 
   public async create(user: IUserInput): Promise<LoginOutputDto> {
@@ -39,7 +40,8 @@ export class AuthService {
     const newUser = await this.userService.create({ ...user, password: pass });
     const { password, ...result } = newUser['dataValues'];
     const token = await this.generateToken(result);
-    return { user: result, token, profile: null };
+    
+    return { user: result, token};
   }
 
   async validateUser(username: string, pass: string): Promise<IUserOuput> {

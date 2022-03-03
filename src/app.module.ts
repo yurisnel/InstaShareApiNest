@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
@@ -10,9 +10,13 @@ import { ProfileModule } from './modules/profiles/profile.module';
 import { FilesModule } from './modules/files/files.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     ConfigModule.forRoot({
       load: [configuration],
     }),

@@ -27,7 +27,7 @@ export class PostsService {
       include: [{ model: userEntity, attributes: { exclude: ['password'] } }],
     });
     if (!item) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This post doesn't exist");
     }
     return item;
   }
@@ -37,7 +37,7 @@ export class PostsService {
       where: { id },
     });
     if (deletedCount === 0) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This post doesn't exist");
     }
     return true;
   }
@@ -51,12 +51,8 @@ export class PostsService {
           where: { id },
         })
         .then(function ([number, items]) {
-          const item = $repo.findOne({ where: { id } });
-          if (item) {
-            resolve(item);
-          } else {
-            throw new NotFoundException("This item doesn't exist");
-          }
+          const item = $repo.findOne({ where: { id } });          
+          resolve(item);         
         });
     });
   }
@@ -68,7 +64,7 @@ export class PostsService {
         { where: { id }, returning: true },
       );
     if (numberOfAffectedRows == 0) {
-      throw new NotFoundException("This item doesn't exist");
+      throw new NotFoundException("This post doesn't exist");
     }
     return updatedPost;
   }

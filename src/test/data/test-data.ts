@@ -1,12 +1,13 @@
 import { Gender } from '../../modules/users/gender';
-import { UserDto } from '../../modules/users/dto/user.dto';
 import { IPostInput } from 'src/modules/posts/post.entity';
+import { IUserInput, User } from 'src/modules/users/user.entity';
 
-export const userDto: UserDto = {
+export const userDto: IUserInput = {
   email: 'test01@gmail.com',
   name: 'Pedro Ramirez',
   password: '123456',
   gender: Gender.MALE,
+  avatar: 'avatar.png'
 };
 
 export const postInput: IPostInput = {

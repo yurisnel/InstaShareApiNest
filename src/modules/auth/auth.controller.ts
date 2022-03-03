@@ -14,14 +14,14 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @Post('login')
-  async login(@Body() login: LoginInputDto) {
+  async login(@Body() login: LoginInputDto): Promise<LoginOutputDto>{
     return await this.authService.login(login);
   }
 
   @ApiCreatedResponse({ type: LoginOutputDto })
   @ApiResponse({ status: 403, description: 'Invalid params' })
   @Post('signup')
-  async signUp(@Body() user: IUserInput) {
+  async signUp(@Body() user: IUserInput): Promise<LoginOutputDto>{
     return await this.authService.create(user);
   }
 }

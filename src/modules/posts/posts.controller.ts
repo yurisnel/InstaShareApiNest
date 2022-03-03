@@ -18,8 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { PostsService } from './posts.service';
-import { IPostInput, IPostOutput } from './post.entity';
-import { PostDto } from './dto/post.dto';
+import { Post as PostEntity, IPostOutput } from './post.entity';
 import { ResponseDto } from 'src/utils/dto/Response.dto';
 
 @ApiTags('posts')
@@ -27,13 +26,13 @@ import { ResponseDto } from 'src/utils/dto/Response.dto';
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
 
-  @ApiOkResponse({ type: [PostDto] })
+  @ApiOkResponse({ type: [PostEntity] })
   @Get()
   async findAll() {
     return await this.postService.findAll();
   }
 
-  @ApiOkResponse({ type: PostDto })
+  @ApiOkResponse({ type: PostEntity })
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<IPostOutput> {
     return await this.postService.findOneById(id);
@@ -41,19 +40,23 @@ export class PostsController {
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('JWT-auth')
-  @ApiCreatedResponse({ type: PostDto })
+  @ApiCreatedResponse({ type: ResponseDto })
   @Post()
-  async create(@Body() post: IPostInput, @Request() req): Promise<IPostOutput> {
-    return await this.postService.create(post, req.user.id);
+  async create(@Body() post: PostEntity, @Request() req): Promise<ResponseDto> {
+    await this.postService.create(post, req.user.id);
+    return {
+      success: true,
+      message: 'Successfully updated',
+    };
   }
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('JWT-auth')
-  @ApiCreatedResponse({ type: PostDto })
+  @ApiCreatedResponse({ type: PostEntity })
   @Put(':id')
   async update(
     @Param('id') id: number,
-    @Body() data: IPostInput,
+    @Body() data: PostEntity,
     @Request() req,
   ): Promise<IPostOutput> {
     return await this.postService.update(data, id);
