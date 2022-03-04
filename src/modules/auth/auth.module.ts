@@ -7,9 +7,11 @@ import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { ProfileModule } from '../profiles/profile.module';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     PassportModule,
     UsersModule,
     ProfileModule,

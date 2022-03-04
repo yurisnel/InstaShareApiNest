@@ -27,14 +27,10 @@ export class ProfileService {
   }
 
   async findOneByUserId(userId: number): Promise<IProfileOutput> {
-    const item = await this.profileRepository.findOne({
+    return await this.profileRepository.findOne({
       where: { userId },
       include: [{ model: userEntity, attributes: { exclude: ['password'] } }],
-    });
-    if (!item) {
-      throw new NotFoundException("This profile doesn't exist");
-    }
-    return item;
+    });  
   }
 
   async delete(id: number): Promise<boolean> {

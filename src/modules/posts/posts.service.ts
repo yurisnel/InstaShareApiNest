@@ -11,8 +11,7 @@ export class PostsService {
   ) {}
 
   async create(post: IPostInput, userId): Promise<IPostOutput> {
-    const item = await this.postRepository.create({ ...post, userId });
-    return item;
+    return await this.postRepository.create({ ...post, userId });  
   }
 
   async findAll(): Promise<IPostOutput[]> {
@@ -22,14 +21,10 @@ export class PostsService {
   }
 
   async findOneById(id: number): Promise<IPostOutput> {
-    const item = await this.postRepository.findOne({
+    return await this.postRepository.findOne({
       where: { id },
       include: [{ model: userEntity, attributes: { exclude: ['password'] } }],
-    });
-    if (!item) {
-      throw new NotFoundException("This post doesn't exist");
-    }
-    return item;
+    });    
   }
 
   async delete(id: number): Promise<boolean> {

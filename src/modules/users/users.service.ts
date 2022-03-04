@@ -14,23 +14,15 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<IUserOuput> {
-    const item = await this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: { email },
-    });
-    if (!item) {
-      throw new NotFoundException("This user doesn't exist");
-    }
-    return item;
+    });   
   }
 
   async findOneById(id: number): Promise<IUserOuput> {
-    const item = await this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: { id },
-    });
-    if (!item) {
-      throw new NotFoundException("This user doesn't exist");
-    }
-    return item;
+    });    
   }
 
   async findAll(): Promise<IUserOuput[]> {
