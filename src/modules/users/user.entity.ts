@@ -95,7 +95,10 @@ export class User
   @Column({
     type: DataType.VIRTUAL(DataType.STRING, ['avatar']),
     get() {     
-      return process.env.IMAGE_SERVER + 'avatars/' + this['avatar'];
+      if(this['avatar'])
+        return process.env.IMAGE_SERVER + '/avatars/' + this['avatar'];
+      else
+        return "";
     }
   })
   avatarUrl: string;

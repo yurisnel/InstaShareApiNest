@@ -1,39 +1,51 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Demo Api Rest con Nestjs
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
+Desarrollado para fines demostrativos y prácticos con framework [Nest](https://github.com/nestjs/nest) version 8.0.0, donde se plantean los siguientes requisitos:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Realizar Api Rest que posibilite  registro de usuario, control de accceso, gestión de post y cargas de imágenes para ser publicadas en el servidor. 
 
-## Installation
+- Utilizar [sequelize](https://sequelize.org/) v6 como ORM.
 
+- Utilizar [Swagger](https://swagger.io/) para describir las operaciones que estarán disponibles en el API. 
+
+- Utiliza [JWT](http://jwt.io) con [Passport](http://passportjs.org) como estrategia de autenticación
+
+
+- Se deben implementar test automáticos.
+
+
+
+## Desarrollo
+
+- Se crean modelos con sequelize fuertemente [typados](https://www.npmjs.com/package/sequelize-typescript), con validaciones y documentación swagger: [user](src\modules\users\user.entity.ts), [profile](src\modules\profiles\profile.entity.ts), [post](src\modules\posts\post.entity.ts)
+
+- Se implementa campo virtual (avatar) en modelo [user](src\modules\users\user.entity.ts)
+
+- Se utiliza el middleware [Multer](https://github.com/expressjs/multer) y se implementan [decorators](src\modules\files\decorator) ApiFiles, ApiFileFields y el PipeTransform [ParseFile](src\pipes\parse.file.pipe.ts) para facilitar el manejo de carga de ficheros.
+
+- Se permite acceso estático a las imágenes cargadas en el servidor con el módulo [serve-static](https://www.npmjs.com/package/@nestjs/serve-static).
+
+-   Se utiliza patrón [repository](https://github.com/yurisnel/laravel8api/blob/main/app/Repositories/ProductRepository.php) donde se realizan todas las operaciones con modelos y base de datos [auth](src\modules\auth\auth.service.ts), [users](src\modules\users\users.service.ts), [profile](src\modules\profiles\profile.service.ts), [posts](src\modules\posts\posts.service.ts).
+
+- Se utilizan [transaction](src\modules\profiles\profile.service.ts) cuando se realizan más de un operaciones de CRUD en una misma funcionalidad para posibilitar realizar commit/rollback.
+
+- Se implementa módulo de [autenticación](src\modules\auth\auth.module.ts)
+
+- Se documentan los controller ( [auth](src\modules\auth\auth.controller.ts), [profiles](src\modules\profiles\profile.controller.ts), [files](src\modules\files\files.controller.ts), [post](src\modules\posts\posts.controller.ts) ) con decoradores de la libreria [nestjs/swagger](https://www.npmjs.com/package/@nestjs/swagger) donde se describen todas las operaciones disponibles en el Api, con nombre de Access Point, método (Get, Post, Post, Delete), parámetros y respuestas con tipos de datos y ejemplos. 
+
+- Se implementan [test e2e](src\test\app.e2e-spec.ts) para las operaciones: registro, login, crear post, carga de fichero.
+
+
+## Implementación de la solución
+
+1. Clonar repositorio: https://github.com/yurisnel/InstaShareApiNest
+2. Descargar dependencias:
 ```bash
 $ npm install
 ```
-
-## Running the app
-
+3. Para ejecutar servidor:
 ```bash
 # development
 $ npm run start
@@ -44,9 +56,7 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
-## Test
-
+4. Para ejecutar test:
 ```bash
 # unit tests
 $ npm run test
@@ -58,16 +68,14 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+5. Abrir api doc en navegador en: http://localhost:3000/api/
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+<img
+src="preview/api-doc.png"
+raw=true
+alt=""
+style="margin:10px"
+/>
 
-## Stay in touch
+**PD:** Esta Api Rest es utilizada por el proyecto  https://github.com/yurisnel/InstaShareAngular
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

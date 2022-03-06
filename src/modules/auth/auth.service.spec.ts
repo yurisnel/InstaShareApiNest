@@ -3,7 +3,6 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from '../users/users.module';
-import { LocalStrategy } from './local.strategy';
 
 
 describe('AuthService', () => {
@@ -19,7 +18,7 @@ describe('AuthService', () => {
           signOptions: { expiresIn: process.env.TOKEN_EXPIRATION },
         }),
       ],
-      providers: [AuthService, LocalStrategy],
+      providers: [AuthService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
