@@ -24,7 +24,7 @@ Desarrollado para fines demostrativos y prácticos con framework [Nest](https://
 
 - Se permite acceso estático a las imágenes cargadas en el servidor con el módulo [serve-static](https://www.npmjs.com/package/@nestjs/serve-static).
 
-- Se utiliza patrón [repository](https://github.com/yurisnel/laravel8api/blob/main/app/Repositories/ProductRepository.php) donde se realizan todas las operaciones con modelos y base de datos [auth](src/modules/auth/auth.service.ts), [users](src/modules/users/users.service.ts), [profile](src/modules/profiles/profile.service.ts), [posts](src/modules/posts/posts.service.ts).
+- Se crean servicios donde se realizan todas las operaciones con modelos y base de datos [auth](src/modules/auth/auth.service.ts), [users](src/modules/users/users.service.ts), [profile](src/modules/profiles/profile.service.ts), [posts](src/modules/posts/posts.service.ts).
 
 - Se utilizan [transaction](src/modules/profiles/profile.service.ts) cuando se realizan más de un operaciones de CRUD en una misma funcionalidad para posibilitar realizar commit/rollback.
 
