@@ -18,7 +18,7 @@ Desarrollado para fines demostrativos y prácticos con framework [Nest](https://
 
 - Se crean modelos con sequelize fuertemente [typados](https://www.npmjs.com/package/sequelize-typescript), con validaciones y documentación swagger: [user](src/modules/users/user.entity.ts), [profile](src/modules/profiles/profile.entity.ts), [post](src/modules/posts/post.entity.ts)
 
-- Se implementa campo virtual (avatar) en modelo [user](src/modules/users/user.entity.ts)
+- Se implementa campo virtual (avatarUrl) en modelo [user](src/modules/users/user.entity.ts)
 
 - Se utiliza el middleware [Multer](https://github.com/expressjs/multer) y se implementan [decorators](src/modules/files/decorator) ApiFiles, ApiFileFields y el PipeTransform [ParseFile](src/pipes/parse.file.pipe.ts) para facilitar el manejo de carga de ficheros.
 
