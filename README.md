@@ -16,27 +16,27 @@ Desarrollado para fines demostrativos y prácticos con framework [Nest](https://
 
 ## Desarrollo
 
-- Se crean modelos con sequelize fuertemente [typados](https://www.npmjs.com/package/sequelize-typescript), con validaciones y documentación swagger: [user](src\modules\users\user.entity.ts), [profile](src\modules\profiles\profile.entity.ts), [post](src\modules\posts\post.entity.ts)
+- Se crean modelos con sequelize fuertemente [typados](https://www.npmjs.com/package/sequelize-typescript), con validaciones y documentación swagger: [user](src/modules/users/user.entity.ts), [profile](src/modules/profiles/profile.entity.ts), [post](src/modules/posts/post.entity.ts)
 
-- Se implementa campo virtual (avatar) en modelo [user](src\modules\users\user.entity.ts)
+- Se implementa campo virtual (avatar) en modelo [user](src/modules/users/user.entity.ts)
 
-- Se utiliza el middleware [Multer](https://github.com/expressjs/multer) y se implementan [decorators](src\modules\files\decorator) ApiFiles, ApiFileFields y el PipeTransform [ParseFile](src\pipes\parse.file.pipe.ts) para facilitar el manejo de carga de ficheros.
+- Se utiliza el middleware [Multer](https://github.com/expressjs/multer) y se implementan [decorators](src/modules/files/decorator) ApiFiles, ApiFileFields y el PipeTransform [ParseFile](src/pipes/parse.file.pipe.ts) para facilitar el manejo de carga de ficheros.
 
 - Se permite acceso estático a las imágenes cargadas en el servidor con el módulo [serve-static](https://www.npmjs.com/package/@nestjs/serve-static).
 
-- Se utiliza patrón [repository](https://github.com/yurisnel/laravel8api/blob/main/app/Repositories/ProductRepository.php) donde se realizan todas las operaciones con modelos y base de datos [auth](src\modules\auth\auth.service.ts), [users](src\modules\users\users.service.ts), [profile](src\modules\profiles\profile.service.ts), [posts](src\modules\posts\posts.service.ts).
+- Se utiliza patrón [repository](https://github.com/yurisnel/laravel8api/blob/main/app/Repositories/ProductRepository.php) donde se realizan todas las operaciones con modelos y base de datos [auth](src/modules/auth/auth.service.ts), [users](src/modules/users/users.service.ts), [profile](src/modules/profiles/profile.service.ts), [posts](src/modules/posts/posts.service.ts).
 
-- Se utilizan [transaction](src\modules\profiles\profile.service.ts) cuando se realizan más de un operaciones de CRUD en una misma funcionalidad para posibilitar realizar commit/rollback.
+- Se utilizan [transaction](src/modules/profiles/profile.service.ts) cuando se realizan más de un operaciones de CRUD en una misma funcionalidad para posibilitar realizar commit/rollback.
 
-- Se implementa módulo de [autenticación](src\modules\auth\auth.module.ts) y se restinguen los Access Point requeridos con:
+- Se implementa módulo de [autenticación](src/modules/auth/auth.module.ts) y se restinguen los Access Point requeridos con:
 
 ```bash
   @UseGuards(AuthGuard('jwt'))
 ```
 
-- Se documentan los controller ( [auth](src\modules\auth\auth.controller.ts), [profiles](src\modules\profiles\profile.controller.ts), [files](src\modules\files\files.controller.ts), [post](src\modules\posts\posts.controller.ts) ) con decoradores de la libreria [nestjs/swagger](https://www.npmjs.com/package/@nestjs/swagger) donde se describen todas las operaciones disponibles en el Api, con nombre de Access Point, método (Get, Post, Post, Delete), parámetros y respuestas con tipos de datos y ejemplos.
+- Se documentan los controller ( [auth](src/modules/auth/auth.controller.ts), [profiles](src/modules/profiles/profile.controller.ts), [files](src/modules/files/files.controller.ts), [post](src/modules/posts/posts.controller.ts) ) con decoradores de la libreria [nestjs/swagger](https://www.npmjs.com/package/@nestjs/swagger) donde se describen todas las operaciones disponibles en el Api, con nombre de Access Point, método (Get, Post, Post, Delete), parámetros y respuestas con tipos de datos y ejemplos.
 
-- Se implementan [test e2e](src\test\app.e2e-spec.ts) para las operaciones: registro, login, crear post, carga de fichero.
+- Se implementan [test e2e](src/test/app.e2e-spec.ts) para las operaciones: registro, login, crear post, carga de fichero.
 
 ## Implementación de la solución
 
